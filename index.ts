@@ -1,5 +1,11 @@
 import express from 'express';
 import morgan from 'morgan';
+import contact from './routes/contact.routes';
+import list from './routes/contactList.routes';
+import models from './routes/models.routes';
+import messageState from './routes/message.state.routes';
+import message from './routes/message.routes';
+import stats from './routes/stats.routes';
 
 
 const PORT = process.env.PORT || 3000;
@@ -14,6 +20,12 @@ app.use(morgan('dev'));
 /**
  * Route initialization
  */
+app.use("/contact", contact);
+app.use("/list", list);
+app.use("/templates", models);
+app.use("/status", messageState);
+app.use("/message", message);
+app.use("/stats", stats);
 
 /**
  * POrt definition
