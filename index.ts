@@ -6,6 +6,7 @@ import models from './routes/models.routes';
 import messageState from './routes/message.state.routes';
 import message from './routes/message.routes';
 import stats from './routes/stats.routes';
+import auth from './routes/auth.routes';
 
 
 const PORT = process.env.PORT || 3000;
@@ -26,6 +27,7 @@ app.use("/templates", models);
 app.use("/status", messageState);
 app.use("/message", message);
 app.use("/stats", stats);
+app.use("/auth", auth);
 
 /**
  * POrt definition
