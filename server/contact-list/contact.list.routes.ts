@@ -1,5 +1,5 @@
 import { Router } from "express";
-import ListController from "./contactList.controller";
+import ContactListCtrl from "./contact.list.controller";
 
 const router = Router();
 
