@@ -1,9 +1,8 @@
 import { Router } from "express";
-import ListController from "../controllers/contactList.controller";
+import MessageStateController from "./message.state.controller";
 
 const router = Router();
 
 // TODO: implement router
-
 
 export default router;
