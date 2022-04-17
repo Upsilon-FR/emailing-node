@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
 
-export default class ContactController {
-
-    // TODO: implement controller
-    
+export default class ContactCtrl {
+  // TODO: implement controller
 }

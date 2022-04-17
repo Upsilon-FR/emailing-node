@@ -1,5 +1,5 @@
 import { Router } from "express";
-import ModelsController from "./models.controller";
+import ModelsCtrl from "./models.controller";
 
 const router = Router();
 

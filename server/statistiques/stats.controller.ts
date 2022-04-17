@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-export default class StatsController {
+export default class StatsCtrl {
   static fnct = (req: Request, res: Response) => {};
   // TODO: implement controller
 }
