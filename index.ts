@@ -1,12 +1,12 @@
 import express from "express";
 import morgan from "morgan";
 import dotenv from "dotenv";
-import contact from "./routes/contact.routes";
-import list from "./routes/contactList.routes";
-import models from "./routes/models.routes";
-import messageState from "./routes/message.state.routes";
-import message from "./routes/message.routes";
-import stats from "./routes/stats.routes";
+import contact from "./server/contact/contact.routes";
+import list from "./server/list-contact/contactList.routes";
+import models from "./server/mysql/models.routes";
+import messageState from "./server/message-state/message.state.routes";
+import message from "./server/message/message.routes";
+import stats from "./server/statistiques/stats.routes";
 
 dotenv.config();
 
