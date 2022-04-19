@@ -34,5 +34,5 @@ app.use("/stats", stats);
  * POrt definition
  */
 app.listen(PORT, () => {
-  console.log(`Example app listening at ${HOST}:${PORT}`);
+  console.log(`API listening at ${HOST}:${PORT}`);
 });
