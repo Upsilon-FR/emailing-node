@@ -27,7 +27,7 @@ app.use("/contact", contact);
 app.use("/list", list);
 app.use("/templates", models);
 app.use("/status", messageState);
-app.use("/message", message);
+app.use("/", message);
 app.use("/stats", stats);
 
 /**

@@ -1,0 +1,13 @@
+### Requête en local ###
+
+###
+# Envoyer un message
+POST http://localhost:3000/message/send
+content-type: application/json
+
+{
+    "object": 3,
+    "content": "test",
+    "sendDate": "12",
+    "sendHour": "12"
+}

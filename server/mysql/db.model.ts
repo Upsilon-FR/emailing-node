@@ -4,10 +4,10 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const config = {
-  host: process.env.HOSTMYSQL || "",
-  user: process.env.USERMYSQL || "",
-  password: process.env.PASSWORDMYSQL || "",
-  database: process.env.DATABASE || "",
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "upsl-msg",
   port: 3306,
 };
 const pool = mysql.createPool(config);

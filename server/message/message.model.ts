@@ -1,25 +1,55 @@
 import { pool } from "../mysql/db.model";
+import Message from "./message";
 
-export default class UserModel {
-  queryUser = async (array: Array<any>) => {
+export default class MsgModel {
+  queryMessage = async (msg: Message) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, connexion) => {
         // When done with the connection, release it.
         connexion.release();
+        console.log(2);
 
         if (err) throw err; // not connected!
 
-        const sql = "SELECT";
-        pool.query(sql, array, (error, results) => {
+        const sql =
+          "INSERT INTO `message` (object, content, sendDate, sendHour, idState, idList) VALUES ('" + msg.object + "', '" + msg.content + "' , '2022-04-03', '23:59:59' , 1 , 1);";
+        pool.query(sql, [], (error, results) => {
           if (error) {
             return reject({ error: true, message: error, data: [] });
           }
-          if (!results[0]) {
-            return reject({ error: true, message: "Utilisateur introuvable", data: results });
+          console.log(results);
+
+          if (results.affectedRows === 0) {
+            return reject({ error: true, message: "Impossible d'envoyer le message", data: results });
           }
-          return resolve({ error: false, message: "Connexion réussi", data: results });
+          return resolve({ error: false, message: "Message envoyé", data: results });
         });
       });
     });
   };
+
+  /* queryMessageOfContact = async (contact: Contact) => {
+    return new Promise((resolve, reject) => {
+      pool.getConnection((err, connexion) => {
+        // When done with the connection, release it.
+        connexion.release();
+        console.log(2);
+
+        if (err) throw err; // not connected!
+
+        const sql = "SELECT * FROM message WHERE idList=(SELECT idList FROM rel_contact-list WHERE idContact=?);";
+        pool.query(sql, [], (error, results) => {
+          if (error) {
+            return reject({ error: true, message: error, data: [] });
+          }
+          console.log(results);
+
+          if (results.affectedRows === 0) {
+            return reject({ error: true, message: "Impossible d'envoyer le message", data: results });
+          }
+          return resolve({ error: false, message: "Message envoyé", data: results });
+        });
+      });
+    });
+  }; */
 }
