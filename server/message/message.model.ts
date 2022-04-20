@@ -10,8 +10,7 @@ export default class MsgModel {
 
         if (err) throw err; // not connected!
 
-        const sql =
-          "INSERT INTO `message` (object, content, sendDate, sendHour, idState, idList) VALUES ('" + msg.object + "', '" + msg.content + "' , '2022-04-03', '23:59:59' , 1 , 1);";
+        const sql = `INSERT INTO message (object, content, sendDate, sendHour, idState, idList) VALUES ('${msg.object}',  '${msg.content}' , '2022-04-03', '23:59:59' , ${msg.state} , 1);`;
         pool.query(sql, [], (error, results) => {
           if (error) {
             return reject({ error: true, message: error, data: [] });
