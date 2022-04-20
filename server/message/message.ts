@@ -9,15 +9,20 @@ enum Type_Probleme {
 } */
 
 export default class Message {
-  object: String;
-  content: String;
+  object: string;
+  content: string;
   sendDate: Date;
   sendHour: Date;
 
-  constructor(object: String, content: String, sendDate: Date, sendHour: Date) {
+  constructor(object: string, content: string, sendDate: Date, sendHour: Date) {
     this.object = object;
     this.content = content;
     this.sendDate = sendDate;
     this.sendHour = sendHour;
   }
+
+  updateMsg = (msg: Message, content: string) => {
+    if (msg.content !== content) msg.content = content;
+    return msg;
+  };
 }
