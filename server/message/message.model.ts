@@ -7,7 +7,6 @@ export default class MsgModel {
       pool.getConnection((err, connexion) => {
         // When done with the connection, release it.
         connexion.release();
-        console.log(2);
 
         if (err) throw err; // not connected!
 
@@ -17,7 +16,6 @@ export default class MsgModel {
           if (error) {
             return reject({ error: true, message: error, data: [] });
           }
-          console.log(results);
 
           if (results.affectedRows === 0) {
             return reject({ error: true, message: "Impossible d'envoyer le message", data: results });
@@ -28,28 +26,26 @@ export default class MsgModel {
     });
   };
 
-  /* queryMessageOfContact = async (contact: Contact) => {
+  queryGetMessage = async () => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, connexion) => {
         // When done with the connection, release it.
         connexion.release();
-        console.log(2);
 
         if (err) throw err; // not connected!
 
-        const sql = "SELECT * FROM message WHERE idList=(SELECT idList FROM rel_contact-list WHERE idContact=?);";
+        const sql = "SELECT * FROM message;";
         pool.query(sql, [], (error, results) => {
           if (error) {
             return reject({ error: true, message: error, data: [] });
           }
-          console.log(results);
 
-          if (results.affectedRows === 0) {
-            return reject({ error: true, message: "Impossible d'envoyer le message", data: results });
+          if (!results[0]) {
+            return reject({ error: true, message: "Impossible de récupérer les messages", data: results });
           }
-          return resolve({ error: false, message: "Message envoyé", data: results });
+          return resolve({ error: false, message: "Message récupéré(s)", data: results });
         });
       });
     });
-  }; */
+  };
 }
