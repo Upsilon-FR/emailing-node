@@ -15,3 +15,20 @@ content-type: application/json
     "sendDate": "12",
     "sendHour": "12"
 }
+
+
+###
+# Nombre total de message envoyé
+GET http://localhost:3000/stats/nb/msg/sent
+
+###
+# Nombre total de message par type
+GET http://localhost:3000/stats/nb/msg/type
+
+###
+# Nombre total de list
+GET http://localhost:3000/stats/nb/list
+
+###
+# Nombre total de list
+GET http://localhost:3000/stats/nb/list
