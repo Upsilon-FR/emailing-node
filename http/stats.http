@@ -1,0 +1,25 @@
+### Requête en local pour les statistiques ###
+
+###
+# Nombre total d'utilisateur admin et user
+GET http://localhost:3000/stats/nb/user
+
+###
+# Nombre total de contact
+GET http://localhost:3000/stats/nb/contact
+
+###
+# Nombre total de list
+GET http://localhost:3000/stats/nb/list
+
+###
+# Nombre total de message envoyé
+GET http://localhost:3000/stats/nb/msg/sent
+
+###
+# Nombre total de message par type
+GET http://localhost:3000/stats/nb/msg/type
+
+###
+# Dernier message envoyé
+GET http://localhost:3000/stats/last/msg
