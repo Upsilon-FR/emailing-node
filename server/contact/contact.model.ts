@@ -4,14 +4,14 @@ import Contact from "./contact";
 export default class ContactModel {
   queryGetContact = async (id: Number) => {
     return new Promise((resolve, reject) => {
-      pool.getConnection((err, connexion) => {
+      pool.getConnection((err: any, connexion: any) => {
         // When done with the connection, release it.
         connexion.release();
 
         if (err) throw err; // not connected!
 
         const sql = `SELECT * FROM contact where id=${id};`;
-        pool.query(sql, [], (error, results) => {
+        pool.query(sql, [], (error: any, results: any) => {
           if (error) {
             return reject({ error: true, message: error, data: [] });
           }
@@ -27,14 +27,14 @@ export default class ContactModel {
 
   queryAddContact = async (contact: Contact) => {
     return new Promise((resolve, reject) => {
-      pool.getConnection((err, connexion) => {
+      pool.getConnection((err: any, connexion: any) => {
         // When done with the connection, release it.
         connexion.release();
 
         if (err) throw err; // not connected!
 
         const sql = `INSERT INTO contact (firstname, lastname, mail, creationDate) VALUES (${contact.firstName}, ${contact.lastName}, ${contact.email}, ${contact.creationDate});`;
-        pool.query(sql, [], (error, results) => {
+        pool.query(sql, [], (error: any, results: any) => {
           if (error) {
             return reject({ error: true, message: error, data: [] });
           }
@@ -50,14 +50,14 @@ export default class ContactModel {
 
   queryDelContact = async (id: Number) => {
     return new Promise((resolve, reject) => {
-      pool.getConnection((err, connexion) => {
+      pool.getConnection((err: any, connexion: any) => {
         // When done with the connection, release it.
         connexion.release();
 
         if (err) throw err; // not connected!
 
         const sql = `DELETE FROM contact where id=${id};`;
-        pool.query(sql, [], (error, results) => {
+        pool.query(sql, [], (error: any, results: any) => {
           if (error) {
             return reject({ error: true, message: error, data: [] });
           }

@@ -5,7 +5,7 @@ export default class ContactListModel {
 
     queryGetContactList = async (id: Number) => {
         return new Promise((resolve, reject) => {
-            pool.getConnection((err, connexion) => {
+            pool.getConnection((err: any, connexion: { release: () => void; }) => {
                 // When done with the connection, release it.
                 connexion.release();
 
@@ -14,7 +14,7 @@ export default class ContactListModel {
                 const sql = `SELECT c.* FROM contact c
                     JOIN rel_contact-list rcl ON rcl.idContact = c.id
                     WHERE rcl.idList=${id};`;
-                pool.query(sql, [], (error, results) => {
+                pool.query(sql, [], (error: any, results: any[]) => {
                 if (error) {
                     return reject({ error: true, message: error, data: [] });
                 }
@@ -30,14 +30,14 @@ export default class ContactListModel {
 
     queryGetList = async (id: Number) => {
         return new Promise((resolve, reject) => {
-            pool.getConnection((err, connexion) => {
+            pool.getConnection((err: any, connexion: { release: () => void; }) => {
                 // When done with the connection, release it.
                 connexion.release();
 
                 if (err) throw err; // not connected!
 
                 const sql = `SELECT * FROM list where id=${id};`;
-                pool.query(sql, [], (error, results) => {
+                pool.query(sql, [], (error: any, results: any[]) => {
                 if (error) {
                     return reject({ error: true, message: error, data: [] });
                 }
@@ -53,14 +53,14 @@ export default class ContactListModel {
 
     queryCreateList = async (contactList: ContactList) => {
         return new Promise((resolve, reject) => {
-            pool.getConnection((err, connexion) => {
+            pool.getConnection((err: any, connexion: { release: () => void; }) => {
                 // When done with the connection, release it.
                 connexion.release();
 
                 if (err) throw err; // not connected!
 
                 const sql = `INSERT INTO list (name, description, creationDate) VALUES (${contactList.name} ${contactList.description}, ${contactList.created});`;
-                pool.query(sql, [], (error, results) => {
+                pool.query(sql, [], (error: any, results: any) => {
                 if (error) {
                     return reject({ error: true, message: error, data: [] });
                 }
@@ -76,14 +76,14 @@ export default class ContactListModel {
 
     queryAddContactToList = async (contact: Number, list: Number) => {
         return new Promise((resolve, reject) => {
-            pool.getConnection((err, connexion) => {
+            pool.getConnection((err: any, connexion: any) => {
                 // When done with the connection, release it.
                 connexion.release();
 
                 if (err) throw err; // not connected!
 
                 const sql = `INSERT INTO rel_contact-list (idContact, idList, label) VALUES (${contact} ${list}, "");`;
-                pool.query(sql, [], (error, results) => {
+                pool.query(sql, [], (error: any, results: any[]) => {
                 if (error) {
                     return reject({ error: true, message: error, data: [] });
                 }
@@ -99,14 +99,14 @@ export default class ContactListModel {
 
     queryRemoveContactFromList = async (contact: Number, list: Number) => {
         return new Promise((resolve, reject) => {
-            pool.getConnection((err, connexion) => {
+            pool.getConnection((err: any, connexion: { release: () => void; }) => {
                 // When done with the connection, release it.
                 connexion.release();
 
                 if (err) throw err; // not connected!
 
                 const sql = `DELETE FROM rel_contact-list WHERE idContact=${contact} AND idList=${list};`;
-                pool.query(sql, [], (error, results) => {
+                pool.query(sql, [], (error: any, results: any[]) => {
                 if (error) {
                     return reject({ error: true, message: error, data: [] });
                 }
@@ -122,7 +122,7 @@ export default class ContactListModel {
 
     queryDeleteList = async (id: Number) => {
         return new Promise((resolve, reject) => {
-            pool.getConnection((err, connexion) => {
+            pool.getConnection((err: any, connexion: { release: () => void; }) => {
                 // When done with the connection, release it.
                 connexion.release();
 
@@ -132,7 +132,7 @@ export default class ContactListModel {
                                 JOIN rel_contact-list rcl ON rcl.idList = l.id
                                 WHERE l.id = ${id};
                 `;
-                pool.query(sql, [], (error, results) => {
+                pool.query(sql, [], (error: any, results: any[]) => {
                 if (error) {
                     return reject({ error: true, message: error, data: [] });
                 }
