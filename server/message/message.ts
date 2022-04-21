@@ -1,3 +1,4 @@
+"use strict";
 import { State } from "../message-state/interface.state";
 
 export default class Message {

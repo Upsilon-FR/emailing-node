@@ -1,0 +1,5 @@
+### Requête en local ###
+
+###
+# Récupérer les contact
+GET http://localhost:3000/contact/1
