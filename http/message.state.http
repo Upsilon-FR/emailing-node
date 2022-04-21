@@ -1,0 +1,5 @@
+### Requête en local pour les statuts ###
+
+###
+# Liste des statuts
+GET http://localhost:3000/status/all

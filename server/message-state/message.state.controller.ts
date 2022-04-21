@@ -4,17 +4,44 @@ import MsgStateModel from "./message.state.model";
 
 export default class MessageStateCtrl extends ClassCtrl {
   // TODO: implement controller
-  static recupEtat = () => {
+
+  /**
+   * Liste des statuts
+   *
+   * @param req
+   * @param res
+   */
+  static recupEtat = (req: Request, res: Response) => {
     let stateQuery = new MsgStateModel().queryState();
     //Requête SQL
     stateQuery
       .then((response) => {
         console.log(response);
-        return response;
+        res.status(200).send(response);
       })
       .catch((error) => {
         console.log(error);
-        return error;
+        res.status(400).send(error);
+      });
+  };
+
+  /**
+   * Changement du statut d'un message
+   *
+   * @param req
+   * @param res
+   */
+  static changeStateMsg = (req: Request, res: Response) => {
+    let stateQuery = new MsgStateModel().queryState();
+    //Requête SQL
+    stateQuery
+      .then((response) => {
+        console.log(response);
+        res.status(200).send(response);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(400).send(error);
       });
   };
 }
