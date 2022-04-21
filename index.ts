@@ -21,19 +21,17 @@ const app = express();
  */
 app.use(express.json());
 app.use(morgan("dev"));
-
 app.use('/swagger', swaggerUI.serve, swaggerUI.setup(docs))
 
-// TODO decommenter
 // /**
 //  * Route initialization
 //  */
-// app.use("/contacts", contact);
-// app.use("/list", list);
-// app.use("/templates", models);
-// app.use("/status", messageState);
-// app.use("/message", message);
-// app.use("/stats", stats);
+app.use("/contacts", contact);
+app.use("/list", list);
+app.use("/templates", models);
+app.use("/status", messageState);
+app.use("/message", message);
+app.use("/stats", stats);
 
 /**
  * POrt definition
