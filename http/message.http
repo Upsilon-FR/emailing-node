@@ -1,7 +1,7 @@
 ### Requête en local ###
 
 ###
-# Envoyer un message
+# Récupérer les messages d'un utilisateur
 GET http://localhost:3000/message/list/user/1
 
 ###
@@ -14,5 +14,16 @@ content-type: application/json
     "content": 1,
     "sendDate": "12",
     "sendHour": "12"
+}
+
+###
+# Modifier un message
+POST http://localhost:3000/message/update
+content-type: application/json
+
+{
+    "id": 1,
+    "content": "",
+    "object": ""
 }
 

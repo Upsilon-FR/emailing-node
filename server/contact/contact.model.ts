@@ -71,8 +71,8 @@ export default class ContactModel {
     });
   };
 
-  queryUpdateName = async(id: Number, firstName: string, lastName: string) => {
-      return new Promise((resolve, reject) => {
+  queryUpdateName = async (id: Number, firstName: string, lastName: string) => {
+    return new Promise((resolve, reject) => {
       pool.getConnection((err: any, connexion: any) => {
         // When done with the connection, release it.
         connexion.release();
@@ -92,10 +92,10 @@ export default class ContactModel {
         });
       });
     });
-  }
+  };
 
-  queryUpdateEmail = async(id: Number, email: string) => {
-      return new Promise((resolve, reject) => {
+  queryUpdateEmail = async (id: Number, email: string) => {
+    return new Promise((resolve, reject) => {
       pool.getConnection((err: any, connexion: any) => {
         // When done with the connection, release it.
         connexion.release();
@@ -115,10 +115,10 @@ export default class ContactModel {
         });
       });
     });
-  }
+  };
 
-  queryGetAll = async() => {
-      return new Promise((resolve, reject) => {
+  queryGetAll = async () => {
+    return new Promise((resolve, reject) => {
       pool.getConnection((err: any, connexion: any) => {
         // When done with the connection, release it.
         connexion.release();
@@ -132,11 +132,11 @@ export default class ContactModel {
           }
 
           if (!results[0]) {
-            return reject({ error: true, message: "Impossible de récupérer le contact", data: results });
+            return reject({ error: true, message: "Impossible de récupérer les contacts", data: results });
           }
-          return resolve({ error: false, message: "Contact récupéré(s)", data: results });
+          return resolve({ error: false, message: "Contact(s) récupéré(s)", data: results });
         });
       });
     });
-  }
+  };
 }

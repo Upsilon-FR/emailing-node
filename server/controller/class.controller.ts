@@ -9,7 +9,7 @@ export default class ClassCtrl {
       }
     });
 
-    //Vérification que le body est correctement rempli
+    //Vérification que les données sont correctement remplies
     Object.entries(dataVerif).forEach(([key, value]) => {
       if ((!value || value === "") && dataIpt.includes(key)) {
         listError.push(`Champ ${key} vide`);
@@ -18,5 +18,25 @@ export default class ClassCtrl {
       }
     });
     return listError;
+  };
+
+  //Vérification de l'intégrité des données optionnelles reçues avec possibilité d'avoir moins 1 des champs requis
+  static verifWithOption = (dataIpt: Array<string>, dataToVerif: Object, OneAtLeast: Boolean = false) => {
+    let listOption: any[] = [];
+
+    dataIpt.forEach((val) => {
+      if (Object.keys(dataToVerif).includes(val)) {
+        listOption.push(val);
+      }
+    });
+
+    let result: any[] = [];
+    if (listOption.length > 0) result = this.verif(listOption, dataToVerif);
+    else if (listOption.length === 0 && OneAtLeast) {
+      let response = "Au moins 1 des champs suivant est requis : ";
+      result.push(response.concat(dataIpt.join(", ")));
+    }
+
+    return result;
   };
 }

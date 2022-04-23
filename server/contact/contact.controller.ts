@@ -4,7 +4,6 @@ import ClassCtrl from "../controller/class.controller";
 import Contact from "./contact";
 
 export default class ContactCtrl extends ClassCtrl {
-
   static getAll = (req: Request, res: Response) => {
     let query = new ContactModel().queryGetAll();
     //Requête SQL
@@ -17,7 +16,7 @@ export default class ContactCtrl extends ClassCtrl {
         console.log(error);
         res.status(400).send(error);
       });
-  }
+  };
 
   static getContact = (req: Request, res: Response) => {
     const contactId = req.params.id ?? null;
@@ -26,17 +25,17 @@ export default class ContactCtrl extends ClassCtrl {
     let error = null;
     let code = 200;
 
-    if(success) {
+    if (success) {
       let query = new ContactModel().queryGetContact(parseInt(contactId));
       query
-          .then((response) => {
-            console.log(response);
-            res.status(200).send(response);
-          })
-          .catch((error) => {
-            console.log(error);
-            res.status(400).send(error);
-          });
+        .then((response) => {
+          console.log(response);
+          res.status(200).send(response);
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(400).send(error);
+        });
     }
   };
 
@@ -52,7 +51,7 @@ export default class ContactCtrl extends ClassCtrl {
         res.status(400).send({ error: true, message: "Erreur", data: [listError] });
       } else {
         let date: Date = new Date();
-        let { firstName, lastName, email} = req.body;
+        let { firstName, lastName, email } = req.body;
         let contact = new Contact(firstName, lastName, email, date);
         if (contact instanceof Contact) {
           let query = new ContactModel().queryAddContact(contact);
@@ -71,7 +70,7 @@ export default class ContactCtrl extends ClassCtrl {
         }
       }
     }
-  }
+  };
 
   static delContact = (req: Request, res: Response) => {
     if (Object.keys(req.params).length === 0) {
@@ -98,7 +97,7 @@ export default class ContactCtrl extends ClassCtrl {
           });
       }
     }
-  }
+  };
 
   static updateContactName = (req: Request, res: Response) => {
     if (Object.keys(req.body).length === 0 || Object.keys(req.params).length === 0) {
@@ -114,7 +113,7 @@ export default class ContactCtrl extends ClassCtrl {
         res.status(400).send({ error: true, message: "Erreur", data: [listError] });
       } else {
         let date: Date = new Date();
-        let { firstName, lastName} = req.body;
+        let { firstName, lastName } = req.body;
         let { id } = req.params;
         let query = new ContactModel().queryUpdateName(parseInt(id), firstName, lastName);
         //Requête SQL
@@ -129,7 +128,7 @@ export default class ContactCtrl extends ClassCtrl {
           });
       }
     }
-  }
+  };
 
   static updateContactEmail = (req: Request, res: Response) => {
     if (Object.keys(req.body).length === 0 || Object.keys(req.params).length === 0) {
@@ -145,7 +144,7 @@ export default class ContactCtrl extends ClassCtrl {
         res.status(400).send({ error: true, message: "Erreur", data: [listError] });
       } else {
         let date: Date = new Date();
-        let {email} = req.body;
+        let { email } = req.body;
         let { id } = req.params;
         let query = new ContactModel().queryUpdateEmail(parseInt(id), email);
         //Requête SQL
@@ -160,5 +159,5 @@ export default class ContactCtrl extends ClassCtrl {
           });
       }
     }
-  }
+  };
 }

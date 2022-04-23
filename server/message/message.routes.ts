@@ -3,14 +3,12 @@ import MessageCtrl from "./message.controller";
 
 const router = Router();
 
-// TODO: implement router
-
-router.get("/:id", MessageCtrl.msgUser); //récupérer un message pour un compte
-router.get("/list/user/:id", MessageCtrl.msgUser); //récupérer l'ensemble des messages d'un user
-router.get("/list/contact/:contact", MessageCtrl.msgContact); //récupérer l'ensemble des messages d'un contact
-router.post("/brouillon", MessageCtrl.brouillonMsg); //message brouillon
-router.post("/send", MessageCtrl.sendMsg); //envoyer un message
-router.post("/update", MessageCtrl.delMsg); //supprimer un message
-router.delete("/delete", MessageCtrl.delMsg); //supprimer un message
+router.get("/:id", MessageCtrl.msgUser); //Récupérer un message pour un compte
+router.get("/list/user/:id", MessageCtrl.msgUser); //Récupérer l'ensemble des messages d'un user
+router.get("/list/contact/:contact", MessageCtrl.msgContact); //Récupérer l'ensemble des messages d'un contact
+router.post("/brouillon", MessageCtrl.brouillonMsg); //Message brouillon
+router.post("/send", MessageCtrl.sendMsg); //Envoyer un message
+router.post("/update", MessageCtrl.changeMsg); //Modifier un message
+router.delete("/delete", MessageCtrl.delMsg); //Supprimer un message
 
 export default router;

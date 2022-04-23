@@ -1,5 +1,9 @@
 ### Requête en local ###
 
 ###
-# Récupérer les contact
+# Récupérer les contact d'un utilisateur
 GET http://localhost:3000/contact/1
+
+###
+# Récupérer l'ensmeble des contacts
+GET http://localhost:3000/contact/all

@@ -6,8 +6,6 @@ import Message from "./message";
 import MsgModel from "./message.model";
 
 export default class MessageCtrl extends ClassCtrl {
-  // TODO: implement controller
-
   //Récupérer les messages d'un utilisateur
   static msgUser = (req: Request, res: Response) => {
     if (Object.keys(req.params).length === 0) {
@@ -20,11 +18,6 @@ export default class MessageCtrl extends ClassCtrl {
       if (this.verif(dataIpt, req.params).length > 0) {
         res.status(400).send({ error: true, message: "Erreur", data: [listError] });
       } else {
-        /*try {
-          let state = await MessageStateCtrl.recupEtat();
-        } catch (error) {}*/
-        //let date: Date = new Date();
-        //let msg = new Message("Titre", "Content Nicolas", date, date);
         let msgQuery = new MsgModel().queryGetMessage();
         //Requête SQL
         msgQuery
@@ -92,14 +85,74 @@ export default class MessageCtrl extends ClassCtrl {
         let date: Date = new Date();
         let { object, content } = req.body;
         let msg = new Message(object, content, date, date);
-        console.log(typeof object);
-        console.log(typeof content);
-        console.log(typeof msg.content);
+
         if (msg instanceof Message) {
           if (msg.state === State.BROU) {
             msg.send();
           }
           let msgQuery = new MsgModel().queryMessage(msg);
+          //Requête SQL
+          msgQuery
+            .then((response) => {
+              console.log(response);
+              res.status(200).send(response);
+            })
+            .catch((error) => {
+              console.log(error);
+              res.status(400).send(error);
+            });
+        } else {
+          res.status(400).send({ error: true, message: "Les données sont incorrectes", data: [] });
+        }
+      }
+    }
+  };
+
+  //Modifier un message, sont content et/ou object
+  static changeMsg = (req: Request, res: Response) => {
+    if (Object.keys(req.body).length === 0) {
+      res.status(400).send({ error: true, message: "Bad request", data: [] });
+    } else {
+      let dataIpt = ["id"];
+      let dataIptOption = ["object", "content"];
+      let copyBody = req.body;
+      let copyBodyOption: any = { object: "", content: "" };
+      let dataOptionToDel: string[] = [];
+
+      //Adaptation des deux objets selon les données reçues
+      Object.keys(copyBody).forEach((k) => {
+        if (dataIptOption.includes(k)) {
+          dataOptionToDel.push(k);
+          copyBodyOption[k] = copyBody[k];
+          delete copyBody[k];
+        }
+      });
+
+      //Supppression des options à ne pas prendre en compte
+      dataIptOption.forEach((k) => {
+        if (!dataOptionToDel.includes(k)) {
+          delete copyBodyOption[k];
+        }
+      });
+
+      let listError = this.verif(dataIpt, copyBody);
+      let listErrorOption = this.verifWithOption(dataIptOption, copyBodyOption, true);
+      listErrorOption.forEach((val) => {
+        listError.push(val);
+      });
+
+      //Vérification si des erreurs ont été trouvée précédement
+      if (listError.length > 0) {
+        res.status(400).send({ error: true, message: "Erreur", data: [listError] });
+      } else {
+        let date: Date = new Date();
+        let { object, content } = req.body;
+        let msg = new Message(object, content, date, date);
+        if (msg instanceof Message) {
+          if (msg.state === State.BROU) {
+            msg.send();
+          }
+          let msgQuery = new MsgModel().queryUpdateMessage(req.body.id, msg);
           //Requête SQL
           msgQuery
             .then((response) => {

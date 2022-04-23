@@ -33,7 +33,7 @@ export default class MsgModel {
 
         if (err) throw err; // not connected!
 
-        const sql = "SELECT * FROM message;";
+        const sql = `SELECT * FROM message;`;
         pool.query(sql, [], (error, results) => {
           if (error) {
             return reject({ error: true, message: error, data: [] });
@@ -43,6 +43,29 @@ export default class MsgModel {
             return reject({ error: true, message: "Impossible de récupérer les messages", data: results });
           }
           return resolve({ error: false, message: "Message récupéré(s)", data: results });
+        });
+      });
+    });
+  };
+
+  queryUpdateMessage = async (id: number, msg: Message) => {
+    return new Promise((resolve, reject) => {
+      pool.getConnection((err, connexion) => {
+        // When done with the connection, release it.
+        connexion.release();
+
+        if (err) throw err; // not connected!
+
+        const sql = `UPDATE message SET content = "Nouu" WHERE id=${id};`;
+        pool.query(sql, [], (error, results) => {
+          if (error) {
+            return reject({ error: true, message: error, data: [] });
+          }
+
+          if (results.affectedRows === 0) {
+            return reject({ error: true, message: "Impossible de modifier le message", data: results });
+          }
+          return resolve({ error: false, message: "Message modifié", data: results });
         });
       });
     });
