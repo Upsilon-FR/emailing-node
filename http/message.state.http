@@ -1,5 +1,33 @@
 ### Requête en local pour les statuts ###
 
 ###
+# Créer un statut
+POST http://localhost:3000/statut/create
+content-type: application/json
+
+{
+    "label": "brouillon"
+}
+
+###
 # Liste des statuts
-GET http://localhost:3000/status/all
+GET http://localhost:3000/statut/all
+
+###
+# Modifier un statut
+PATCH http://localhost:3000/statut/change
+content-type: application/json
+
+{
+    "id": 1,
+    "label": "brouillon"
+}
+
+###
+# Supprimer un statut
+DELETE http://localhost:3000/statut/delete
+content-type: application/json
+
+{
+    "id": 1
+}

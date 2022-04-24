@@ -27,7 +27,7 @@ app.use("/swagger", swaggerUI.serve, swaggerUI.setup(docs));
  */
 app.use("/contact", contact);
 app.use("/list", list);
-app.use("/status", messageState);
+app.use("/statut", messageState);
 app.use("/message", message);
 app.use("/stats", stats);
 

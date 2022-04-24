@@ -6,7 +6,32 @@ import Message from "./message";
 import MsgModel from "./message.model";
 
 export default class MessageCtrl extends ClassCtrl {
-  //Récupérer les messages d'un utilisateur
+  /**
+   * Liste des messages
+   *
+   * @param req
+   * @param res
+   */
+  static getMessage = (req: Request, res: Response) => {
+    let stateQuery = new MsgModel().queryGetMessage();
+    //Requête SQL
+    stateQuery
+      .then((response) => {
+        console.log(response);
+        res.status(200).send(response);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(400).send(error);
+      });
+  };
+
+  /**
+   * Récupérer les messages d'un utilisateur
+   *
+   * @param req
+   * @param res
+   */
   static msgUser = (req: Request, res: Response) => {
     if (Object.keys(req.params).length === 0) {
       res.status(400).send({ error: true, message: "Bad request", data: [] });
@@ -15,7 +40,7 @@ export default class MessageCtrl extends ClassCtrl {
       let listError = this.verif(dataIpt, req.params);
 
       //Vérification si des erreurs ont été trouvée précédement
-      if (this.verif(dataIpt, req.params).length > 0) {
+      if (listError.length > 0) {
         res.status(400).send({ error: true, message: "Erreur", data: [listError] });
       } else {
         let msgQuery = new MsgModel().queryGetMessage();
@@ -33,8 +58,37 @@ export default class MessageCtrl extends ClassCtrl {
     }
   };
 
-  //Récupérer les messages correspondant à un contact
-  static msgContact = (req: Request, res: Response) => {};
+  /**
+   * Récupérer les messages correspondant à un contact
+   *
+   * @param req
+   * @param res
+   */
+  static msgContact = (req: Request, res: Response) => {
+    if (Object.keys(req.params).length === 0) {
+      res.status(400).send({ error: true, message: "Bad request", data: [] });
+    } else {
+      let dataIpt = ["id"];
+      let listError = this.verif(dataIpt, req.params);
+
+      //Vérification si des erreurs ont été trouvée précédement
+      if (listError.length > 0) {
+        res.status(400).send({ error: true, message: "Erreur", data: [listError] });
+      } else {
+        let msgQuery = new MsgModel().queryGetMessageContact();
+        //Requête SQL
+        msgQuery
+          .then((response) => {
+            console.log(response);
+            res.status(200).send(response);
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(400).send(error);
+          });
+      }
+    }
+  };
 
   //Message brouillon
   static brouillonMsg = (req: Request, res: Response) => {
@@ -170,6 +224,30 @@ export default class MessageCtrl extends ClassCtrl {
     }
   };
 
-  //supprimer un message
-  static delMsg = (req: Request, res: Response) => {};
+  //Supprimer un message
+  static delMsg = (req: Request, res: Response) => {
+    if (Object.keys(req.params).length === 0) {
+      res.status(400).send({ error: true, message: "Bad request", data: [] });
+    } else {
+      let dataIpt = ["id"];
+      let listError = this.verif(dataIpt, req.params);
+
+      //Vérification si des erreurs ont été trouvée précédement
+      if (listError.length > 0) {
+        res.status(400).send({ error: true, message: "Erreur", data: [listError] });
+      } else {
+        let msgDelQuery = new MsgModel().queryDelMsg(req.body.id);
+        //Requête SQL
+        msgDelQuery
+          .then((response) => {
+            console.log(response);
+            res.status(200).send(response);
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(400).send(error);
+          });
+      }
+    }
+  };
 }

@@ -2,8 +2,6 @@ import { Request, Response } from "express";
 import StatsModel from "./stats.model";
 
 export default class StatsCtrl {
-  // TODO: implement controller
-
   /**
    * Nombre total utilisateurs dont x admin et y user
    *
@@ -106,7 +104,6 @@ export default class StatsCtrl {
 
   /**
    * Dernier message envoyé (id)
-   *
    *
    * @param req
    * @param res

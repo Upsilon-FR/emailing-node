@@ -63,9 +63,9 @@ export default class ContactModel {
           }
 
           if (!results[0]) {
-            return reject({ error: true, message: "Impossible de récupérer le contact", data: results });
+            return reject({ error: true, message: "Impossible de supprimer le contact", data: results });
           }
-          return resolve({ error: false, message: "Contact récupéré(s)", data: results });
+          return resolve({ error: false, message: "Contact supprimé", data: results });
         });
       });
     });

@@ -1,6 +1,10 @@
 ### Requête en local ###
 
 ###
+# Récupérer l'ensemble des messages
+GET http://localhost:3000/message/list
+
+###
 # Récupérer les messages d'un utilisateur
 GET http://localhost:3000/message/list/user/1
 
@@ -18,7 +22,7 @@ content-type: application/json
 
 ###
 # Modifier un message
-POST http://localhost:3000/message/update
+PATCH http://localhost:3000/message/update
 content-type: application/json
 
 {
@@ -26,4 +30,15 @@ content-type: application/json
     "content": "",
     "object": ""
 }
+
+###
+# Modifier un message
+DELETE http://localhost:3000/message/delet
+content-type: application/json
+
+{
+    "id": 1,
+    "content": ""
+}
+
 
