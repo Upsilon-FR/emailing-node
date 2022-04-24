@@ -27,6 +27,25 @@ export default class MessageCtrl extends ClassCtrl {
   };
 
   /**
+   * Liste des messages prêt à être envoyé
+   *
+   * @param req
+   * @param res
+   */
+  static getMessageReady = (req: Request, res: Response) => {
+    let stateQuery = new MsgModel().queryGetMessageReady();
+    //Requête SQL
+    stateQuery
+      .then((response) => {
+        res.status(200).send(response);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(400).send(error);
+      });
+  };
+
+  /**
    * Récupérer les messages d'un utilisateur
    *
    * @param req

@@ -1,6 +1,8 @@
 import express from "express";
 import morgan from "morgan";
 import dotenv from "dotenv";
+import cron from "node-cron";
+import axios from "axios";
 import swaggerUI from "swagger-ui-express";
 import contact from "./server/contact/contact.routes";
 import list from "./server/contact-list/contact.list.routes";
@@ -30,6 +32,22 @@ app.use("/list", list);
 app.use("/statut", messageState);
 app.use("/message", message);
 app.use("/stats", stats);
+
+cron.schedule("* * * * *", function () {
+  console.log("Récupération des messages en cours...");
+  axios({
+    method: "get",
+    url: `${HOST}:${PORT}/message/list/ready`,
+  }).then((response) => {
+    if (response.data.data.length > 0) {
+      console.log(`${response.data.data.length} message(s) prêt à être envoyé(s)`);
+
+      setTimeout(() => {
+        console.log("Hello");
+      }, 1000);
+    }
+  });
+});
 
 /**
  * Port definition

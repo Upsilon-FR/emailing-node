@@ -59,6 +59,34 @@ export default class MsgModel {
   };
 
   /**
+   * Requête SQL de récupération de l'ensemble des messages
+   *
+   * @returns Object
+   */
+  queryGetMessageReady = async () => {
+    return new Promise((resolve, reject) => {
+      pool.getConnection((err, connexion) => {
+        // When done with the connection, release it.
+        connexion.release();
+
+        if (err) throw err; // not connected!
+
+        const sql = `SELECT * FROM message WHERE idState = 3;`;
+        pool.query(sql, [], (error, results) => {
+          if (error) {
+            return reject({ error: true, message: error, data: [] });
+          }
+
+          if (!results[0]) {
+            return reject({ error: true, message: "Impossible de récupérer les messages", data: [] });
+          }
+          return resolve({ error: false, message: "Message récupéré(s)", data: results });
+        });
+      });
+    });
+  };
+
+  /**
    * Requête SQL de récupération de l'ensemble des messages d'un contact
    *
    * @returns Object
