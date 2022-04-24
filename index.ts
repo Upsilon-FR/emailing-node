@@ -33,25 +33,46 @@ app.use("/statut", messageState);
 app.use("/message", message);
 app.use("/stats", stats);
 
-cron.schedule("* * * * *", function () {
-  console.log("Récupération des messages en cours...");
-  axios({
-    method: "get",
-    url: `${HOST}:${PORT}/message/list/ready`,
-  }).then((response) => {
-    if (response.data.data.length > 0) {
-      console.log(`${response.data.data.length} message(s) prêt à être envoyé(s)`);
+const apiUrlMsgReady = `${HOST}:${PORT}/message/list/ready`;
 
-      setTimeout(() => {
-        console.log("Hello");
-      }, 1000);
-    }
-  });
+cron.schedule("* * * * *", () => {
+  console.log("Récupération des messages prêt à envoyer en cours...");
+  try {
+    axios({
+      method: "get",
+      url: apiUrlMsgReady,
+    })
+      .then((response) => {
+        if (response.data.data.length > 0) {
+          console.log("\x1b[36m%s\x1b[0m", `${response.data.data.length} message(s) prêt à être envoyé(s)`);
+          console.log("\x1b[36m%s\x1b[0m", `Message(s) en cours d'envoi(s)...`);
+
+          setTimeout(() => {
+            response.data.data.forEach((el: { id: any }) => {
+              axios({
+                method: "patch",
+                url: `${HOST}:${PORT}/message/send`,
+                data: {
+                  id: el.id,
+                },
+              }).then((response) => {
+                console.log("\x1b[36m%s\x1b[0m", `Message envoyé`);
+              });
+            });
+          }, 10000);
+        }
+      })
+      .catch((err) => {
+        console.log("\x1b[33m%s\x1b[0m", err.response.data.message);
+      });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 /**
  * Port definition
  */
 app.listen(PORT, () => {
-  console.log(`API listening at ${HOST}:${PORT}`);
+  console.log("\x1b[43m%s\x1b[0m", `API listening at ${HOST}:${PORT}`);
 });

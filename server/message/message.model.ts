@@ -31,6 +31,34 @@ export default class MsgModel {
   };
 
   /**
+   * Requête SQL d'envoi d'un message
+   *
+   * @returns Object
+   */
+  querySendMessage = async (id: number) => {
+    return new Promise((resolve, reject) => {
+      pool.getConnection((err, connexion) => {
+        // When done with the connection, release it.
+        connexion.release();
+
+        if (err) throw err; // not connected!
+
+        const sql = `UPDATE message SET idState = 4 WHERE id=${id};`;
+        pool.query(sql, [], (error, results) => {
+          if (error) {
+            return reject({ error: true, message: error, data: [] });
+          }
+
+          if (results.affectedRows === 0) {
+            return reject({ error: true, message: "Impossible d'envoyer le message", data: results });
+          }
+          return resolve({ error: false, message: "Message envoyé", data: results });
+        });
+      });
+    });
+  };
+
+  /**
    * Requête SQL de récupération de l'ensemble des messages
    *
    * @returns Object
@@ -59,7 +87,7 @@ export default class MsgModel {
   };
 
   /**
-   * Requête SQL de récupération de l'ensemble des messages
+   * Requête SQL de récupération de l'ensemble des messages prêt à être envoyés
    *
    * @returns Object
    */
@@ -78,7 +106,7 @@ export default class MsgModel {
           }
 
           if (!results[0]) {
-            return reject({ error: true, message: "Impossible de récupérer les messages", data: [] });
+            return reject({ error: true, message: "Aucun message(s) prêt à être envoyé(s)", data: [] });
           }
           return resolve({ error: false, message: "Message récupéré(s)", data: results });
         });

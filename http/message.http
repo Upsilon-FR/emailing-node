@@ -9,8 +9,20 @@ GET http://localhost:3000/message/list
 GET http://localhost:3000/message/list/user/1
 
 ###
-# Envoyer un message
+# Créer un message
 POST http://localhost:3000/message/send
+content-type: application/json
+
+{
+    "object": "true",
+    "content": 1,
+    "sendDate": "12",
+    "sendHour": "12"
+}
+
+###
+# Créer un message
+PATCH http://localhost:3000/message/send
 content-type: application/json
 
 {
