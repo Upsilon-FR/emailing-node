@@ -21,15 +21,21 @@ content-type: application/json
 }
 
 ###
-# Créer un message
+# Préparer un message
+POST http://localhost:3000/message/prepare
+content-type: application/json
+
+{
+    "id": 33
+}
+
+###
+# Envoyer un message
 PATCH http://localhost:3000/message/send
 content-type: application/json
 
 {
-    "object": "true",
-    "content": 1,
-    "sendDate": "12",
-    "sendHour": "12"
+    "id": 33
 }
 
 ###
@@ -44,13 +50,12 @@ content-type: application/json
 }
 
 ###
-# Modifier un message
-DELETE http://localhost:3000/message/delet
+# Supprimer un message
+DELETE http://localhost:3000/message/delete
 content-type: application/json
 
 {
-    "id": 1,
-    "content": ""
+    "id": 1
 }
 
 

@@ -27,7 +27,7 @@ export default class MessageCtrl extends ClassCtrl {
   };
 
   /**
-   * Liste des messages prêt à être envoyé
+   * Liste des messages prêt à être envoyés
    *
    * @param req
    * @param res
@@ -77,7 +77,7 @@ export default class MessageCtrl extends ClassCtrl {
   };
 
   /**
-   * Récupérer les messages correspondant à un contact
+   * Récupérer les messages d'un contact
    *
    * @param req
    * @param res
@@ -108,7 +108,12 @@ export default class MessageCtrl extends ClassCtrl {
     }
   };
 
-  //Message brouillon
+  /**
+   * Message brouillon
+   *
+   * @param req
+   * @param res
+   */
   static brouillonMsg = (req: Request, res: Response) => {
     if (Object.keys(req.body).length === 0) {
       res.status(400).send({ error: true, message: "Bad request", data: [] });
@@ -142,8 +147,13 @@ export default class MessageCtrl extends ClassCtrl {
     }
   };
 
-  //Envoyer un message
-  static sendMsg = (req: Request, res: Response) => {
+  /**
+   * Préparer un message
+   *
+   * @param req
+   * @param res
+   */
+  static prepareMsg = (req: Request, res: Response) => {
     if (Object.keys(req.body).length === 0) {
       res.status(400).send({ error: true, message: "Bad request", data: [] });
     } else {
@@ -154,7 +164,7 @@ export default class MessageCtrl extends ClassCtrl {
       if (listError.length > 0) {
         res.status(400).send({ error: true, message: "Erreur", data: [listError] });
       } else {
-        let msgQuery = new MsgModel().querySendMessage(req.body.id);
+        let msgQuery = new MsgModel().queryPrepareMessage(parseInt(req.body.id));
         //Requête SQL
         msgQuery
           .then((response) => {
@@ -169,7 +179,44 @@ export default class MessageCtrl extends ClassCtrl {
     }
   };
 
-  //Modifier un message, sont content et/ou object
+  /**
+   * Envoyer un message
+   *
+   * @param req
+   * @param res
+   */
+  static sendMsg = (req: Request, res: Response) => {
+    if (Object.keys(req.body).length === 0) {
+      res.status(400).send({ error: true, message: "Bad request", data: [] });
+    } else {
+      let dataIpt = ["id"];
+      let listError = this.verif(dataIpt, req.body);
+
+      //Vérification si des erreurs ont été trouvée précédement
+      if (listError.length > 0) {
+        res.status(400).send({ error: true, message: "Erreur", data: [listError] });
+      } else {
+        let msgQuery = new MsgModel().querySendMessage(parseInt(req.body.id));
+        //Requête SQL
+        msgQuery
+          .then((response) => {
+            console.log(response);
+            res.status(200).send(response);
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(400).send(error);
+          });
+      }
+    }
+  };
+
+  /**
+   * Modifier un message : sont content et/ou object
+   *
+   * @param req
+   * @param res
+   */
   static changeMsg = (req: Request, res: Response) => {
     if (Object.keys(req.body).length === 0) {
       res.status(400).send({ error: true, message: "Bad request", data: [] });
@@ -231,13 +278,18 @@ export default class MessageCtrl extends ClassCtrl {
     }
   };
 
-  //Supprimer un message
+  /**
+   * Supprimer un message
+   *
+   * @param req
+   * @param res
+   */
   static delMsg = (req: Request, res: Response) => {
-    if (Object.keys(req.params).length === 0) {
+    if (Object.keys(req.body).length === 0) {
       res.status(400).send({ error: true, message: "Bad request", data: [] });
     } else {
       let dataIpt = ["id"];
-      let listError = this.verif(dataIpt, req.params);
+      let listError = this.verif(dataIpt, req.body);
 
       //Vérification si des erreurs ont été trouvée précédement
       if (listError.length > 0) {
