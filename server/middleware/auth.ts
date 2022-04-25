@@ -7,7 +7,7 @@ const AUTH_ROUTES = ['/message/send'];
 const authToken = (req: Request, res: Response, next: NextFunction) => {
 
     // test la route authorisée sans token
-  if (AUTH_ROUTES.some((r) => r === req.url)) {
+  if (AUTH_ROUTES.some((r) => r !== req.url)) {
     next()
     return
   }
