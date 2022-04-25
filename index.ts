@@ -10,6 +10,8 @@ import messageState from "./server/message-state/message.state.routes";
 import message from "./server/message/message.routes";
 import stats from "./server/statistiques/stats.routes";
 import docs from "./docs/index";
+import authToken from "./server/middleware/auth";
+import Authentication from './server/auth/auth';
 
 dotenv.config();
 
@@ -22,6 +24,7 @@ const app = express();
  */
 app.use(express.json());
 app.use(morgan("dev"));
+app.use(authToken);
 app.use("/swagger", swaggerUI.serve, swaggerUI.setup(docs));
 
 /**
@@ -48,6 +51,11 @@ cron.schedule("* * * * *", () => {
           console.log("\x1b[36m%s\x1b[0m", `Message(s) en cours d'envoi(s)...`);
 
           setTimeout(() => {
+            const authData = {
+              job: "cron", 
+              description: "Send message"
+            }
+            const token = Authentication.auth(authData);
             response.data.data.forEach((el: { id: any }) => {
               axios({
                 method: "patch",
@@ -55,6 +63,9 @@ cron.schedule("* * * * *", () => {
                 data: {
                   id: el.id,
                 },
+                headers : {
+                  Authorization: "Bearer " + token 
+                }
               }).then((response) => {
                 console.log("\x1b[36m%s\x1b[0m", `Message envoyé`);
               });
