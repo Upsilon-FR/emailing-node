@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
+import moment from "moment";
 import ClassCtrl from "../controller/class.controller";
 import ContactListModel from "./contact.list.model";
 import ContactList from "./contactList";
 
 export default class ContactListCtrl extends ClassCtrl {
-
   static getList = (req: Request, res: Response) => {
     if (Object.keys(req.params).length === 0) {
       res.status(400).send({ error: true, message: "Bad request", data: [] });
@@ -16,7 +16,7 @@ export default class ContactListCtrl extends ClassCtrl {
       if (listError.length > 0) {
         res.status(400).send({ error: true, message: "Erreur", data: [listError] });
       } else {
-        let { id } = req.params
+        let { id } = req.params;
         let query = new ContactListModel().queryGetContactList(parseInt(id));
         //Requête SQL
         query
@@ -30,7 +30,7 @@ export default class ContactListCtrl extends ClassCtrl {
           });
       }
     }
-  }
+  };
 
   static create = (req: Request, res: Response) => {
     if (Object.keys(req.body).length === 0) {
@@ -44,8 +44,9 @@ export default class ContactListCtrl extends ClassCtrl {
         res.status(400).send({ error: true, message: "Erreur", data: [listError] });
       } else {
         let date: Date = new Date();
+        let formattedDate = moment(date).format("YYYY-MM-DD");
         let { name, description } = req.body;
-        let list = new ContactList(name, description, date);
+        let list = new ContactList(name, description, formattedDate);
         if (list instanceof ContactList) {
           let query = new ContactListModel().queryCreateList(list);
           //Requête SQL
@@ -63,8 +64,14 @@ export default class ContactListCtrl extends ClassCtrl {
         }
       }
     }
-  }
+  };
 
+  /**
+   * Ajouter un contact à une liste
+   *
+   * @param req
+   * @param res
+   */
   static addContactToList = (req: Request, res: Response) => {
     if (Object.keys(req.params).length === 0) {
       res.status(400).send({ error: true, message: "Bad request", data: [] });
@@ -76,7 +83,6 @@ export default class ContactListCtrl extends ClassCtrl {
       if (listError.length > 0) {
         res.status(400).send({ error: true, message: "Erreur", data: [listError] });
       } else {
-        let date: Date = new Date();
         let { list, contact } = req.params;
         let query = new ContactListModel().queryAddContactToList(parseInt(contact), parseInt(list));
         //Requête SQL
@@ -91,8 +97,14 @@ export default class ContactListCtrl extends ClassCtrl {
           });
       }
     }
-  }
+  };
 
+  /**
+   * Suppressimer un contact d'une liste
+   *
+   * @param req
+   * @param res
+   */
   static removeContactFromList = (req: Request, res: Response) => {
     if (Object.keys(req.params).length === 0) {
       res.status(400).send({ error: true, message: "Bad request", data: [] });
@@ -104,7 +116,6 @@ export default class ContactListCtrl extends ClassCtrl {
       if (listError.length > 0) {
         res.status(400).send({ error: true, message: "Erreur", data: [listError] });
       } else {
-        let date: Date = new Date();
         let { list, contact } = req.params;
         let query = new ContactListModel().queryRemoveContactFromList(parseInt(contact), parseInt(list));
         //Requête SQL
@@ -119,8 +130,14 @@ export default class ContactListCtrl extends ClassCtrl {
           });
       }
     }
-  }
+  };
 
+  /**
+   * Suppressimer une liste
+   *
+   * @param req
+   * @param res
+   */
   static delete = (req: Request, res: Response) => {
     if (Object.keys(req.params).length === 0) {
       res.status(400).send({ error: true, message: "Bad request", data: [] });
@@ -146,5 +163,5 @@ export default class ContactListCtrl extends ClassCtrl {
           });
       }
     }
-  }
+  };
 }

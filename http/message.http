@@ -15,7 +15,8 @@ content-type: application/json
 
 {
     "object": "true",
-    "content": "Test"
+    "content": "Test",
+    "idList": 1
 }
 
 ###

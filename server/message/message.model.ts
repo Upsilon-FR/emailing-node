@@ -8,7 +8,7 @@ export default class MsgModel {
    *
    * @returns Object
    */
-  queryMessage = async (msg: Message) => {
+  queryMessage = async (idList: number, msg: Message) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, connexion) => {
         // When done with the connection, release it.
@@ -16,16 +16,27 @@ export default class MsgModel {
 
         if (err) throw err; // not connected!
 
-        const sql = `INSERT INTO message (object, content, sendDate, sendHour, idState, idList) VALUES ('${msg.object}',  '${msg.content}' , '${msg.sendDate}' , '${msg.sendHour}' , ${msg.state} , 1);`;
-        pool.query(sql, [], (error, results) => {
+        const sqlVerif = `SELECT * FROM list WHERE id = ${idList}`;
+        const sql = `INSERT INTO message (object, content, sendDate, sendHour, idState, idList) VALUES ('${msg.object}',  '${msg.content}' , '${msg.sendDate}' , '${msg.sendHour}' , ${msg.state} , ${idList});`;
+        pool.query(sqlVerif, [], (error, results) => {
           if (error) {
             return reject({ error: true, message: error, data: [] });
           }
 
-          if (results.affectedRows === 0) {
-            return reject({ error: true, message: "Impossible de créer le message", data: {} });
+          if (results[0]) {
+            pool.query(sql, [], (error, results) => {
+              if (error) {
+                return reject({ error: true, message: error, data: [] });
+              }
+
+              if (results.affectedRows === 0) {
+                return reject({ error: true, message: "Impossible de créer le message", data: {} });
+              }
+              return resolve({ error: false, message: "Message crée", data: [] });
+            });
+          } else {
+            return reject({ error: true, message: "Liste inexistante", data: [] });
           }
-          return resolve({ error: false, message: "Message crée", data: [] });
         });
       });
     });

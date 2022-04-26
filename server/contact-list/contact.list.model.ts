@@ -10,7 +10,7 @@ export default class ContactListModel {
 
         if (err) throw err; // not connected!
 
-        const sql = `SELECT c.* FROM contact as c JOIN \`rel_contact-list\` as rcl ON rcl.idContact = c.id WHERE rcl.idList=${id};`;
+        const sql = `SELECT c.* FROM contact as c INNER JOIN \`rel_contact-list\` as rcl ON rcl.idContact = c.id WHERE rcl.idList=${id};`;
         pool.query(sql, [], (error: any, results: any) => {
           if (error) {
             return reject({ error: true, message: error, data: [] });
@@ -56,16 +56,16 @@ export default class ContactListModel {
 
         if (err) throw err; // not connected!
 
-        const sql = `INSERT INTO list (name, description, creationDate) VALUES ('${contactList.name}', '${contactList.description}', '23-02-2022');`;
+        const sql = `INSERT INTO list (name, description, creationDate) VALUES ('${contactList.name}', '${contactList.description}', '${contactList.created}');`;
         pool.query(sql, [], (error: any, results: any) => {
           if (error) {
             return reject({ error: true, message: error, data: [] });
           }
 
-          if (!results[0]) {
-            return reject({ error: true, message: "Impossible de récupérer le contact", data: results });
+          if (results.affectedRows === 0) {
+            return reject({ error: true, message: "Impossible de créer la list", data: results });
           }
-          return resolve({ error: false, message: "Contact récupéré(s)", data: results });
+          return resolve({ error: false, message: "Liste créée", data: [] });
         });
       });
     });
@@ -79,16 +79,25 @@ export default class ContactListModel {
 
         if (err) throw err; // not connected!
 
+        const sqlVerif = `SELECT * FROM list WHERE id = ${list}`;
         const sql = `INSERT INTO \`rel_contact-list\` (idContact, idList, label) VALUES (${contact}, ${list}, 'test');`;
-        pool.query(sql, [], (error: any, results: any) => {
+        pool.query(sqlVerif, [], (error, results) => {
           if (error) {
             return reject({ error: true, message: error, data: [] });
           }
+          console.log(results);
+          console.log(results.length > 0);
 
-          if (!results[0]) {
-            return reject({ error: true, message: "Impossible d'ajouter le contact", data: results });
+          if (results.length > 0) {
+            pool.query(sql, [], (error, results) => {
+              if (!results || results.affectedRows === 0) {
+                return reject({ error: true, message: "Impossible d'ajouter le contact à la liste", data: [] });
+              }
+              return resolve({ error: false, message: "Contact ajouté à la liste", data: [] });
+            });
+          } else {
+            return reject({ error: true, message: "Liste inconnue", data: [] });
           }
-          return resolve({ error: false, message: "Contact ajouté à la liste", data: results });
         });
       });
     });
@@ -108,10 +117,10 @@ export default class ContactListModel {
             return reject({ error: true, message: error, data: [] });
           }
 
-          if (!results[0]) {
-            return reject({ error: true, message: "Impossible de retirer le contact de la liste", data: results });
+          if (results.affectedRows === 0) {
+            return reject({ error: true, message: "Impossible de retirer le contact de la liste", data: [] });
           }
-          return resolve({ error: false, message: "Contact retiré de la list", data: results });
+          return resolve({ error: false, message: "Contact retiré de la liste", data: [] });
         });
       });
     });
@@ -125,16 +134,16 @@ export default class ContactListModel {
 
         if (err) throw err; // not connected!
 
-        const sql = `DELETE l, rcl FROM list as l JOIN \`rel_contact-list\` as rcl ON rcl.idList = l.id WHERE l.id = ${id}; `;
+        const sql = `DELETE FROM list WHERE id = ${id};`;
         pool.query(sql, [], (error: any, results: any) => {
           if (error) {
             return reject({ error: true, message: error, data: [] });
           }
 
-          if (!results[0]) {
-            return reject({ error: true, message: "Impossible de supprimer la liste de contact", data: results });
+          if (results.affectedRows === 0) {
+            return reject({ error: true, message: "Impossible de supprimer la liste de contact", data: [] });
           }
-          return resolve({ error: false, message: "Liste supprimée", data: results });
+          return resolve({ error: false, message: "Liste supprimée", data: [] });
         });
       });
     });

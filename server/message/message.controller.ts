@@ -118,7 +118,7 @@ export default class MessageCtrl extends ClassCtrl {
     if (Object.keys(req.body).length === 0) {
       res.status(400).send({ error: true, message: "Bad request", data: [] });
     } else {
-      let dataIpt = ["object", "content"];
+      let dataIpt = ["idList", "object", "content"];
       let listError = this.verif(dataIpt, req.body);
 
       //Vérification si des erreurs ont été trouvée précédement
@@ -131,7 +131,7 @@ export default class MessageCtrl extends ClassCtrl {
         let { object, content } = req.body;
         let msg = new Message(object, content, formattedDate, formattedTime);
         if (msg instanceof Message) {
-          let msgQuery = new MsgModel().queryMessage(msg);
+          let msgQuery = new MsgModel().queryMessage(parseInt(req.body.idList), msg);
           //Requête SQL
           msgQuery
             .then((response) => {
