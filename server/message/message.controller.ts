@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import moment from "moment";
 import ClassCtrl from "../controller/class.controller";
-import { State } from "../message-state/interface.state";
 import Message from "./message";
 import MsgModel from "./message.model";
 

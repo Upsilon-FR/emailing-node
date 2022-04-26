@@ -5,7 +5,46 @@ import ContactListModel from "./contact.list.model";
 import ContactList from "./contactList";
 
 export default class ContactListCtrl extends ClassCtrl {
+  /**
+   * Récupérer une liste
+   *
+   * @param req
+   * @param res
+   */
   static getList = (req: Request, res: Response) => {
+    if (Object.keys(req.params).length === 0) {
+      res.status(400).send({ error: true, message: "Bad request", data: [] });
+    } else {
+      let dataIpt = ["id"];
+      let listError = this.verif(dataIpt, req.params);
+
+      //Vérification si des erreurs ont été trouvée précédement
+      if (listError.length > 0) {
+        res.status(400).send({ error: true, message: "Erreur", data: [listError] });
+      } else {
+        let { id } = req.params;
+        let query = new ContactListModel().queryGetList(parseInt(id));
+        //Requête SQL
+        query
+          .then((response) => {
+            console.log(response);
+            res.status(200).send(response);
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(400).send(error);
+          });
+      }
+    }
+  };
+
+  /**
+   * Récupérer les contcats d'une liste
+   *
+   * @param req
+   * @param res
+   */
+  static getContactList = (req: Request, res: Response) => {
     if (Object.keys(req.params).length === 0) {
       res.status(400).send({ error: true, message: "Bad request", data: [] });
     } else {
@@ -32,6 +71,12 @@ export default class ContactListCtrl extends ClassCtrl {
     }
   };
 
+  /**
+   * Créer une liste
+   *
+   * @param req
+   * @param res
+   */
   static create = (req: Request, res: Response) => {
     if (Object.keys(req.body).length === 0) {
       res.status(400).send({ error: true, message: "Bad request", data: [] });

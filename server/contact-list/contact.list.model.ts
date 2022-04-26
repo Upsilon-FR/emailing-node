@@ -25,6 +25,11 @@ export default class ContactListModel {
     });
   };
 
+  /**
+   * Requête SQL de récupération d'une liste
+   *
+   * @returns Object
+   */
   queryGetList = async (id: Number) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err: any, connexion: any) => {
@@ -42,12 +47,17 @@ export default class ContactListModel {
           if (!results[0]) {
             return reject({ error: true, message: "Impossible de récupérer la liste", data: results });
           }
-          return resolve({ error: false, message: "Contact récupéré(s)", data: results[0] });
+          return resolve({ error: false, message: "Liste récupérée", data: results[0] });
         });
       });
     });
   };
 
+  /**
+   * Requête SQL de création d'une liste
+   *
+   * @returns Object
+   */
   queryCreateList = async (contactList: ContactList) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err: any, connexion: any) => {
@@ -71,6 +81,11 @@ export default class ContactListModel {
     });
   };
 
+  /**
+   * Requête SQL d'ajout d'un contact dans une liste message
+   *
+   * @returns Object
+   */
   queryAddContactToList = async (contact: Number, list: Number) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err: any, connexion: any) => {
@@ -103,6 +118,11 @@ export default class ContactListModel {
     });
   };
 
+  /**
+   * Requête SQL de suppression d'un contact d'une liste
+   *
+   * @returns Object
+   */
   queryRemoveContactFromList = async (contact: Number, list: Number) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err: any, connexion: any) => {
@@ -126,6 +146,11 @@ export default class ContactListModel {
     });
   };
 
+  /**
+   * Requête SQL de suppression d'une liste
+   *
+   * @returns Object
+   */
   queryDeleteList = async (id: Number) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err: any, connexion: any) => {

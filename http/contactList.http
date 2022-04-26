@@ -1,8 +1,12 @@
 ### Requête en local ###
 
 ###
-# Récupérer une liste de contacts
-GET http://localhost:3000/list/1
+# Récupérer une liste
+GET http://localhost:3000/list/26
+
+###
+# Récupérer les contacts d'une liste
+GET http://localhost:3000/list/contact/26
 
 ###
 # Créer une list de contact
@@ -16,7 +20,7 @@ content-type: application/json
 
 ###
 # Ajouter un contact dans une liste
-POST http://localhost:3000/list/update/1/add/1
+POST http://localhost:3000/list/update/26/add/1
 content-type: application/json
 
 ###

@@ -24,12 +24,12 @@ export default class MsgStateModel {
           if (!results[0]) {
             pool.query(sql, [], (error, results) => {
               if (results.affectedRows === 0) {
-                return reject({ error: true, message: "Impossible de créer le statut", data: results });
+                return reject({ error: true, message: "Impossible de créer le statut", data: [] });
               }
-              return resolve({ error: false, message: "Statut créé", data: results });
+              return resolve({ error: false, message: "Statut créé", data: [] });
             });
           }
-          return reject({ error: true, message: "Impossible de créer le statut : statut déjà existant", data: results });
+          return reject({ error: true, message: "Impossible de créer le statut : statut déjà existant", data: [] });
         });
       });
     });
@@ -55,7 +55,7 @@ export default class MsgStateModel {
           }
 
           if (results.affectedRows === 0) {
-            return reject({ error: true, message: "Impossible de récupérer les statuts", data: results });
+            return reject({ error: true, message: "Impossible de récupérer les statuts", data: [] });
           }
           return resolve({ error: false, message: "Statuts récupérés", data: results });
         });
@@ -83,7 +83,7 @@ export default class MsgStateModel {
           }
 
           if (results.affectedRows === 0) {
-            return reject({ error: true, message: "Impossible de récupérer le statut", data: results });
+            return reject({ error: true, message: "Impossible de récupérer le statut", data: [] });
           }
           return resolve({ error: false, message: "Statut récupéré", data: results });
         });
@@ -113,16 +113,16 @@ export default class MsgStateModel {
           }
 
           if (!results[0]) {
-            return reject({ error: true, message: "Impossible de modifier le statut : statut inexistant", data: results });
+            return reject({ error: true, message: "Impossible de modifier le statut : statut inexistant", data: [] });
           } else {
             pool.query(sqlVerifLabel, [], (error, results2) => {
               if (results2[0]) {
-                return reject({ error: true, message: "Modification du statut annulée : label identique", data: results2 });
+                return reject({ error: true, message: "Modification du statut annulée : label identique", data: [] });
               }
 
               pool.query(sql, [], (error, results3) => {
                 if (results3.affectedRows === 0) {
-                  return reject({ error: true, message: error, data: results3 });
+                  return reject({ error: true, message: error, data: [] });
                 }
                 return resolve({ error: false, message: "Statut modifié", data: [] });
               });
@@ -153,7 +153,7 @@ export default class MsgStateModel {
           }
 
           if (results.affectedRows === 0) {
-            return reject({ error: true, message: "Statut inexistant", data: results });
+            return reject({ error: true, message: "Statut inexistant", data: [] });
           }
           return resolve({ error: false, message: "Statut supprimé", data: results });
         });
