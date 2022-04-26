@@ -2,8 +2,37 @@
 
 ###
 # Récupérer les contact d'un utilisateur
-GET http://localhost:3000/contact/1
+GET http://localhost:3000/contact/details/1
 
 ###
 # Récupérer l'ensmeble des contacts
 GET http://localhost:3000/contact/all
+
+###
+# Créer un contact
+POST http://localhost:3000/contact/add
+content-type: application/json
+
+{
+    "name": "Nico",
+    "firstname": "Nicolas",
+    "lastname": "Lacoste",
+    "mail": "nlacoste@myges.fr"
+}
+
+###
+# Modifier un contact: sont fisrtname, lastname et/ou email
+PATCH http://localhost:3000/contact/update
+content-type: application/json
+
+{
+  "id": 2,
+  "firstname": "Nicolas",
+  "lastname": "Lacoste",
+  "mail": "nlacoste@myges.fr"
+}
+
+###
+# Suppression d'un contact
+DELETE http://localhost:3000/contact/delete/2
+content-type: application/json

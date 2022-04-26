@@ -16,16 +16,16 @@ export default class MsgModel {
 
         if (err) throw err; // not connected!
 
-        const sql = `INSERT INTO message (object, content, sendDate, sendHour, idState, idList) VALUES ('${msg.object}',  '${msg.content}' , '2022-04-03', '23:59:59' , ${msg.state} , 1);`;
+        const sql = `INSERT INTO message (object, content, sendDate, sendHour, idState, idList) VALUES ('${msg.object}',  '${msg.content}' , '${msg.sendDate}' , '${msg.sendHour}' , ${msg.state} , 1);`;
         pool.query(sql, [], (error, results) => {
           if (error) {
             return reject({ error: true, message: error, data: [] });
           }
 
           if (results.affectedRows === 0) {
-            return reject({ error: true, message: "Impossible d'envoyer le message", data: results });
+            return reject({ error: true, message: "Impossible de créer le message", data: {} });
           }
-          return resolve({ error: false, message: "Message envoyé", data: results });
+          return resolve({ error: false, message: "Message crée", data: [] });
         });
       });
     });
@@ -37,7 +37,7 @@ export default class MsgModel {
    *
    * @returns Object
    */
-  querySendMessage = async (id: number) => {
+  querySendMessage = async (id: number, date: string, hour: string) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, connexion) => {
         // When done with the connection, release it.
@@ -45,7 +45,7 @@ export default class MsgModel {
 
         if (err) throw err; // not connected!
 
-        const sql = `UPDATE message SET idState = 4 WHERE id=${id};`;
+        const sql = `UPDATE message SET idState = 4, sentDate = '${date}', sentHour = '${hour}' WHERE id=${id};`;
         pool.query(sql, [], (error, results) => {
           if (error) {
             return reject({ error: true, message: error, data: [] });
@@ -179,7 +179,7 @@ export default class MsgModel {
    *
    * @returns Object
    */
-  queryUpdateMessage = async (id: number, msg: Message) => {
+  queryUpdateMessage = async (id: number, data: any = {}) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, connexion) => {
         // When done with the connection, release it.
@@ -187,16 +187,28 @@ export default class MsgModel {
 
         if (err) throw err; // not connected!
 
-        const sql = `UPDATE message SET content = "Nouu" WHERE id=${id};`;
+        let strgData = "";
+        let lenData = Object.keys(data).length;
+        let cpt = 1;
+
+        Object.keys(data).forEach((k) => {
+          strgData += `${k} = '${data[k]}'`;
+          if (cpt < lenData) {
+            strgData += ", ";
+            cpt++;
+          }
+        });
+
+        const sql = `UPDATE message SET ${strgData} WHERE id=${id};`;
         pool.query(sql, [], (error, results) => {
           if (error) {
             return reject({ error: true, message: error, data: [] });
           }
 
           if (results.affectedRows === 0) {
-            return reject({ error: true, message: "Impossible de modifier le message", data: results });
+            return reject({ error: true, message: "Impossible de modifier le message", data: [] });
           }
-          return resolve({ error: false, message: "Message modifié", data: results });
+          return resolve({ error: false, message: "Message modifié", data: [] });
         });
       });
     });
@@ -224,7 +236,7 @@ export default class MsgModel {
           if (results.affectedRows === 0) {
             return reject({ error: true, message: "Impossible de supprimer le message", data: [] });
           }
-          return resolve({ error: false, message: "Message supprimé", data: results });
+          return resolve({ error: false, message: "Message supprimé", data: [] });
         });
       });
     });

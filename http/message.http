@@ -10,14 +10,12 @@ GET http://localhost:3000/message/list/user/1
 
 ###
 # Créer un message
-POST http://localhost:3000/message/send
+POST http://localhost:3000/message/brouillon
 content-type: application/json
 
 {
     "object": "true",
-    "content": 1,
-    "sendDate": "12",
-    "sendHour": "12"
+    "content": "Test"
 }
 
 ###
@@ -26,7 +24,7 @@ POST http://localhost:3000/message/prepare
 content-type: application/json
 
 {
-    "id": 33
+    "id": 51
 }
 
 ###
@@ -44,9 +42,8 @@ PATCH http://localhost:3000/message/update
 content-type: application/json
 
 {
-    "id": 1,
-    "content": "",
-    "object": ""
+    "id": 2,
+    "content": "Roooo"
 }
 
 ###

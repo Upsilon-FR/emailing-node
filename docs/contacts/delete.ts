@@ -1,10 +1,10 @@
 export default {
   delete: {
-    tags: ['Contact'],
+    tags: ["Contact"],
     description: "Delete contact",
     operationId: "deleteContact",
     parameters: [
-        {
+      {
         in: "path",
         required: true,
         type: "integer",
@@ -13,7 +13,7 @@ export default {
     ],
     responses: {
       200: {
-        description: "Product created successfully",
+        description: "Contact delete successfully",
       },
       400: {
         description: "Error",

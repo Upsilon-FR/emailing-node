@@ -2,8 +2,15 @@ import { Request, Response } from "express";
 import ContactModel from "./contact.model";
 import ClassCtrl from "../controller/class.controller";
 import Contact from "./contact";
+import moment from "moment";
 
 export default class ContactCtrl extends ClassCtrl {
+  /**
+   * Récupérer l'ensemble des contacts
+   *
+   * @param req
+   * @param res
+   */
   static getAll = (req: Request, res: Response) => {
     let query = new ContactModel().queryGetAll();
     //Requête SQL
@@ -18,32 +25,48 @@ export default class ContactCtrl extends ClassCtrl {
       });
   };
 
+  /**
+   * Récupérer un contact en détail
+   *
+   * @param req
+   * @param res
+   */
   static getContact = (req: Request, res: Response) => {
-    const contactId = req.params.id ?? null;
+    if (Object.keys(req.params).length === 0) {
+      res.status(400).send({ error: true, message: "Bad request", data: [] });
+    } else {
+      let dataIpt = ["id"];
+      let listError = this.verif(dataIpt, req.params);
 
-    let success = true;
-    let error = null;
-    let code = 200;
-
-    if (success) {
-      let query = new ContactModel().queryGetContact(parseInt(contactId));
-      query
-        .then((response) => {
-          console.log(response);
-          res.status(200).send(response);
-        })
-        .catch((error) => {
-          console.log(error);
-          res.status(400).send(error);
-        });
+      //Vérification si des erreurs ont été trouvée précédement
+      if (listError.length > 0) {
+        res.status(400).send({ error: true, message: "Erreur", data: [listError] });
+      } else {
+        let query = new ContactModel().queryGetContact(parseInt(req.params.id));
+        query
+          .then((response) => {
+            console.log(response);
+            res.status(200).send(response);
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(400).send(error);
+          });
+      }
     }
   };
 
+  /**
+   * Ajouter un contact
+   *
+   * @param req
+   * @param res
+   */
   static addContact = (req: Request, res: Response) => {
     if (Object.keys(req.body).length === 0) {
       res.status(400).send({ error: true, message: "Bad request", data: [] });
     } else {
-      let dataIpt = ["firstName", "lastName", "email"];
+      let dataIpt = ["name", "firstname", "lastname", "mail"];
       let listError = this.verif(dataIpt, req.body);
 
       //Vérification si des erreurs ont été trouvée précédement
@@ -51,8 +74,10 @@ export default class ContactCtrl extends ClassCtrl {
         res.status(400).send({ error: true, message: "Erreur", data: [listError] });
       } else {
         let date: Date = new Date();
-        let { firstName, lastName, email } = req.body;
-        let contact = new Contact(firstName, lastName, email, date);
+        let formattedDate = moment(date).format("YYYY-MM-DD");
+        let { name, firstname, lastname, mail } = req.body;
+        let contact = new Contact(name, firstname, lastname, mail, formattedDate);
+
         if (contact instanceof Contact) {
           let query = new ContactModel().queryAddContact(contact);
           //Requête SQL
@@ -72,6 +97,69 @@ export default class ContactCtrl extends ClassCtrl {
     }
   };
 
+  /**
+   * Modifier un contact: sont nom, prénom et/ou email
+   *
+   * @param req
+   * @param res
+   */
+  static updateContact = (req: Request, res: Response) => {
+    if (Object.keys(req.body).length === 0) {
+      res.status(400).send({ error: true, message: "Bad request", data: [] });
+    } else {
+      let dataIpt1 = ["id"];
+      let dataIptOption = ["firstname", "lastname", "mail"];
+      let copyBody = req.body;
+      let copyBodyOption: any = { firstname: "", lastname: "", mail: "" };
+      let dataOptionToDel: string[] = [];
+
+      //Adaptation des deux objets selon les données reçues
+      Object.keys(copyBody).forEach((k) => {
+        if (dataIptOption.includes(k)) {
+          dataOptionToDel.push(k);
+          copyBodyOption[k] = copyBody[k];
+          delete copyBody[k];
+        }
+      });
+
+      //Supppression des options à ne pas prendre en compte
+      dataIptOption.forEach((k) => {
+        if (!dataOptionToDel.includes(k)) {
+          delete copyBodyOption[k];
+        }
+      });
+
+      let listError = this.verif(dataIpt1, copyBody);
+      let listErrorOption = this.verifWithOption(dataIptOption, copyBodyOption, true);
+      listErrorOption.forEach((val) => {
+        listError.push(val);
+      });
+
+      //Vérification si des erreurs ont été trouvée précédement
+      if (listError.length > 0) {
+        res.status(400).send({ error: true, message: "Erreur", data: [listError] });
+      } else {
+        let query = new ContactModel().queryUpdate(parseInt(req.body.id), copyBodyOption);
+        //Requête SQL
+        query
+          .then((response) => {
+            console.log(response);
+            res.status(200).send(response);
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(400).send(error);
+          });
+      }
+    }
+  };
+
+  /**
+   * Supprimer un contact
+   *
+   * @param req
+   * @param res
+   */
   static delContact = (req: Request, res: Response) => {
     if (Object.keys(req.params).length === 0) {
       res.status(400).send({ error: true, message: "Bad request", data: [] });
@@ -85,68 +173,6 @@ export default class ContactCtrl extends ClassCtrl {
       } else {
         let { id } = req.params;
         let query = new ContactModel().queryDelContact(parseInt(id));
-        //Requête SQL
-        query
-          .then((response) => {
-            console.log(response);
-            res.status(200).send(response);
-          })
-          .catch((error) => {
-            console.log(error);
-            res.status(400).send(error);
-          });
-      }
-    }
-  };
-
-  static updateContactName = (req: Request, res: Response) => {
-    if (Object.keys(req.body).length === 0 || Object.keys(req.params).length === 0) {
-      res.status(400).send({ error: true, message: "Bad request", data: [] });
-    } else {
-      let dataIpt = ["firstName", "lastName"];
-      let dataIpt2 = ["id"];
-      let listError = this.verif(dataIpt, req.body);
-      let listError2 = this.verif(dataIpt2, req.params);
-
-      //Vérification si des erreurs ont été trouvée précédement
-      if (listError.length > 0 || listError2.length > 0) {
-        res.status(400).send({ error: true, message: "Erreur", data: [listError] });
-      } else {
-        let date: Date = new Date();
-        let { firstName, lastName } = req.body;
-        let { id } = req.params;
-        let query = new ContactModel().queryUpdateName(parseInt(id), firstName, lastName);
-        //Requête SQL
-        query
-          .then((response) => {
-            console.log(response);
-            res.status(200).send(response);
-          })
-          .catch((error) => {
-            console.log(error);
-            res.status(400).send(error);
-          });
-      }
-    }
-  };
-
-  static updateContactEmail = (req: Request, res: Response) => {
-    if (Object.keys(req.body).length === 0 || Object.keys(req.params).length === 0) {
-      res.status(400).send({ error: true, message: "Bad request", data: [] });
-    } else {
-      let dataIpt = ["email"];
-      let dataIpt2 = ["id"];
-      let listError = this.verif(dataIpt, req.body);
-      let listError2 = this.verif(dataIpt2, req.params);
-
-      //Vérification si des erreurs ont été trouvée précédement
-      if (listError.length > 0 || listError2.length > 0) {
-        res.status(400).send({ error: true, message: "Erreur", data: [listError] });
-      } else {
-        let date: Date = new Date();
-        let { email } = req.body;
-        let { id } = req.params;
-        let query = new ContactModel().queryUpdateEmail(parseInt(id), email);
         //Requête SQL
         query
           .then((response) => {

@@ -3,7 +3,7 @@ import ContactListCtrl from "./contact.list.controller";
 
 const router = Router();
 
-router.get("/:id", ContactListCtrl.getList); //récupérer les details d'un contact
+router.get("/:id", ContactListCtrl.getList); //récupérer une liste
 router.post("/create", ContactListCtrl.create); //ajoute une liste de contacts
 router.post("/update/:list/add/:contact", ContactListCtrl.addContactToList); //update une liste de contacts
 router.post("/update/:list/remove/:contact", ContactListCtrl.removeContactFromList); //update une liste de contacts

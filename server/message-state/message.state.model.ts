@@ -146,14 +146,14 @@ export default class MsgStateModel {
 
         if (err) throw err; // not connected!
 
-        const sql = `DELETE FROM state where id=${id};`;
+        const sql = `DELETE FROM state WHERE id=${id};`;
         pool.query(sql, [], (error, results) => {
           if (error) {
             return reject({ error: true, message: error, data: [] });
           }
 
           if (results.affectedRows === 0) {
-            return reject({ error: true, message: "Impossible de supprimer le statut", data: results });
+            return reject({ error: true, message: "Statut inexistant", data: results });
           }
           return resolve({ error: false, message: "Statut supprimé", data: results });
         });

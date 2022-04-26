@@ -9,7 +9,7 @@ export default class MessageStateCtrl extends ClassCtrl {
    * @param req
    * @param res
    */
-  static createStateMsg = async (req: Request, res: Response) => {
+  static createStateMsg = (req: Request, res: Response) => {
     if (Object.keys(req.body).length === 0) {
       res.status(400).send({ error: true, message: "Bad request", data: [] });
     } else {

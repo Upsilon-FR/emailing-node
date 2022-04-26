@@ -1,21 +1,13 @@
 export default {
   patch: {
-    tags: ['Contact'],
-    description: "update contact email",
-    operationId: "updateContactEmail",
-    parameters: [
-      {
-        in: "path",
-        required: true,
-        type: "integer",
-        name: "id",
-      },
-    ],
+    tags: ["Contact"],
+    description: "update contact",
+    operationId: "updateContact",
     requestBody: {
       content: {
         "application/json": {
           schema: {
-            $ref: "#/components/schemas/contactEmail",
+            $ref: "#/components/schemas/contactUpdate",
           },
         },
       },

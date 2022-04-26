@@ -1,16 +1,15 @@
-
 export default class Contact {
+  name: string;
+  lastname: string;
+  firstname: string;
+  mail: string;
+  creationDate: string;
 
-    lastName: String;
-    firstName: String;
-    email: String;
-    creationDate: Date;
-
-
-  constructor(lastName: String, firstName: String, email:String, creationDate: Date) {
-      this.lastName = lastName;
-      this.firstName = firstName;
-      this.email = email;
-      this.creationDate = creationDate;
+  constructor(name: string, lastname: string, firstname: string, mail: string, creationDate: string) {
+    this.name = name;
+    this.lastname = lastname;
+    this.firstname = firstname;
+    this.mail = mail;
+    this.creationDate = creationDate;
   }
 }

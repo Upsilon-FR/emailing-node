@@ -11,7 +11,7 @@ import message from "./server/message/message.routes";
 import stats from "./server/statistiques/stats.routes";
 import docs from "./docs/index";
 import authToken from "./server/middleware/auth";
-import Authentication from './server/auth/auth';
+import Authentication from "./server/auth/auth";
 
 dotenv.config();
 
@@ -52,20 +52,20 @@ cron.schedule("* * * * *", () => {
 
           setTimeout(() => {
             const authData = {
-              job: "cron", 
-              description: "Send message"
-            }
+              job: "cron",
+              description: "Send message",
+            };
             const token = Authentication.auth(authData);
             response.data.data.forEach((el: { id: any }) => {
               axios({
                 method: "patch",
                 url: `${HOST}:${PORT}/message/send`,
                 data: {
-                  id: el.id,
+                  id: parseInt(el.id),
                 },
-                headers : {
-                  Authorization: "Bearer " + token 
-                }
+                headers: {
+                  Authorization: "Bearer " + token,
+                },
               }).then((response) => {
                 console.log("\x1b[36m%s\x1b[0m", `Message envoyé`);
               });
